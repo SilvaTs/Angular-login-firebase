@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { ToastrService } from 'ngx-toastr';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-user',
@@ -11,10 +12,13 @@ import { ToastrService } from 'ngx-toastr';
 export class RegisterUserComponent implements OnInit{
 
   registerUser!: FormGroup;
+  loading: boolean = false;
 
   constructor(private fb: FormBuilder,
               private afAuth: AngularFireAuth,
-              private toastr: ToastrService) {
+              private toastr: ToastrService,
+              private router: Router
+              ) {
     this.registerUser = this.fb.group({
       email: ['', Validators.required],
       password: ['', Validators.required],
@@ -30,10 +34,19 @@ export class RegisterUserComponent implements OnInit{
     const password = this.registerUser.value.password;
     const confirmPassword = this.registerUser.value.confirmPassword;
    
-    this.afAuth.createUserWithEmailAndPassword(email, password).then((user) => {
-      console.log(user);
+    if(password != confirmPassword) {
+      this.toastr.error(this.fireBaseError('As senhas inseridas devem ser as mesmas'), 'Error');
+      return;
+    }
+
+    this.loading = true;
+    this.afAuth.createUserWithEmailAndPassword(email, password)
+    .then((user) => {
+      this.loading = false;
+      this.toastr.success('Usuário registrado com sucesso', 'Usuário registrado');
+      this.router.navigate(['/login']);
     }).catch((error) => {
-      console.log(error);
+      this.loading = false;
       this.toastr.error(this.fireBaseError(error.code), 'Error');
     })
   }
