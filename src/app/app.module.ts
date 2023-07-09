@@ -8,6 +8,7 @@ import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { RegisterUserComponent } from './components/register-user/register-user.component';
 import { CheckMailComponent } from './components/check-mail/check-mail.component';
 import { RecoverPasswordComponent } from './components/recover-password/recover-password.component';
+import { SpinnerComponent } from './shared/spinner/spinner.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { RecoverPasswordComponent } from './components/recover-password/recover-
     DashboardComponent,
     RegisterUserComponent,
     CheckMailComponent,
-    RecoverPasswordComponent
+    RecoverPasswordComponent,
+    SpinnerComponent
   ],
   imports: [
     BrowserModule,
