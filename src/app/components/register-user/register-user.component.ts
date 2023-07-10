@@ -1,3 +1,4 @@
+import { FirebaseErrorService } from './../../services/firebase-error.service';
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
@@ -17,7 +18,8 @@ export class RegisterUserComponent implements OnInit{
   constructor(private fb: FormBuilder,
               private afAuth: AngularFireAuth,
               private toastr: ToastrService,
-              private router: Router
+              private router: Router,
+              private firebaseError: FirebaseErrorService
               ) {
     this.registerUser = this.fb.group({
       email: ['', Validators.required],
@@ -26,16 +28,16 @@ export class RegisterUserComponent implements OnInit{
     });
   }
 
-  ngOnInit(): void {   
+  ngOnInit(): void {
   }
 
   register(){
     const email = this.registerUser.value.email;
     const password = this.registerUser.value.password;
     const confirmPassword = this.registerUser.value.confirmPassword;
-   
+
     if(password != confirmPassword) {
-      this.toastr.error(this.fireBaseError('As senhas inseridas devem ser as mesmas'), 'Error');
+      this.toastr.error(this.firebaseError.codeError('As senhas inseridas devem ser as mesmas'), 'Error');
       return;
     }
 
@@ -47,20 +49,8 @@ export class RegisterUserComponent implements OnInit{
       this.router.navigate(['/login']);
     }).catch((error) => {
       this.loading = false;
-      this.toastr.error(this.fireBaseError(error.code), 'Error');
+      this.toastr.error(this.firebaseError.codeError(error.code), 'Error');
     })
   }
 
-  fireBaseError(code: string) {
-    switch(code){
-      case 'auth/email-already-in-use':
-        return 'O usuário já existe';
-        case 'auth/weak-password':
-          return 'A senha é muito fraca';
-          case 'auth/invalid-email':
-          return 'Email inválido';
-      default:
-        return 'Erro desconhecido';  
-    }
-  }
 }
