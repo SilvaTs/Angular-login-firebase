@@ -23,14 +23,14 @@ export class RecoverPasswordComponent implements OnInit {
     private firebaseError: FirebaseErrorService
   ) {
     this.recoverUser = this.fb.group({
-      email: ['', Validators.required],
+      recoverEmail: ['', [Validators.required, Validators.email]],
     });
   }
   ngOnInit(): void {
   }
 
   Recover() {
-    const email = this.recoverUser.value.email;
+    const email = this.recoverUser.value.recoverEmail;
 
     this.loading = true;
     this.afAuth.sendPasswordResetEmail(email).then(() => {
