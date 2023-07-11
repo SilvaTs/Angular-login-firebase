@@ -6,10 +6,22 @@
     <div class="form-floating mb-3">
       <input type="email" class="form-control" formControlName="email" placeholder="name@example.com" />
       <label>Email</label>
+      <span *ngIf="registerUser.get('email')?.hasError('required') && registerUser.get('email')?.touched" class="text-danger errorLabel">
+        O <strong>email</strong> é requerido
+    </span>
+    <span *ngIf="registerUser.get('email')?.hasError('email') && registerUser.get('email')?.touched" class="text-danger errorLabel">
+      O <strong>email</strong> é inválido
+  </span>
     </div>
     <div class="form-floating mb-3">
       <input type="password" class="form-control" formControlName="password" placeholder="Senha" />
       <label>Senha</label>
+      <span *ngIf="registerUser.get('password')?.hasError('required') && registerUser.get('password')?.touched" class="text-danger errorLabel">
+        A <strong>senha</strong> é requerida
+    </span>
+    <span *ngIf="registerUser.get('password')?.hasError('minlength') && registerUser.get('password')?.touched" class="text-danger errorLabel">
+        A <strong>senha</strong> Deve ter 6 caracteres
+    </span>
     </div>
     <div class="form-floating mb-3">
       <input type="password" class="form-control" formControlName="confirmPassword" placeholder="Confirmar senha" />
